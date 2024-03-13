@@ -1,4 +1,7 @@
 "use client";
+
+import Link from "next/link";
+
 export default function Page() {
     // Placeholder data for cabinets
     const cabinets = ['Cabinet 1', 'Cabinet 2', 'Cabinet 3'];
@@ -15,12 +18,6 @@ export default function Page() {
     console.log(`Deleting ${cabinet}`);
   };
 
-  // Function to handle adding new cabinet
-  const handleAddNewCabinet = () => {
-    // Placeholder function for adding new cabinet
-    console.log('Adding new cabinet');
-  };
-
   return(
     <div className="bg-gray-100 min-h-screen flex flex-col">
 
@@ -31,7 +28,7 @@ export default function Page() {
       
       {/* List of cabinets */}
       <div className="mb-4">
-        <button className="bg-blue-500 text-white px-2 py-1 rounded mb-4" onClick={handleAddNewCabinet}>Add New Cabinet</button>
+      <Link href="/cabinet/create"><button className="bg-blue-500 text-white px-2 py-1 rounded mb-4">Create Cabinet</button></Link>
         <table className="w-full border-collapse border border-gray-300">
           <thead className="bg-gray-200">
             <tr>
@@ -44,8 +41,9 @@ export default function Page() {
               <tr key={index}>
                 <td className="border border-gray-300 px-4 py-2">{cabinet}</td>
                 <td className="border border-gray-300 px-4 py-2">
-                  <button className="bg-green-500 text-white px-2 py-1 rounded mr-2" onClick={() => handleEditCabinet(cabinet)}>Edit</button>
-                  <button className="bg-red-500 text-white px-2 py-1 rounded" onClick={() => handleDeleteCabinet(cabinet)}>Delete</button>
+                <Link href={`cabinet/${index}`}><button className="bg-yellow-500 text-white px-2 py-1 rounded mr-2">View</button></Link>
+                  <Link href={`cabinet/edit/${index}`}><button className="bg-green-500 text-white px-2 py-1 rounded mr-2">Edit</button></Link>
+                  <Link href={`cabinet/delete/${index}`}><button className="bg-red-500 text-white px-2 py-1 rounded">Delete</button></Link>
                 </td>
               </tr>
             ))}

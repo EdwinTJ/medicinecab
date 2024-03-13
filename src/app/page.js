@@ -1,3 +1,4 @@
+import Link from "next/link";
 export default function Home() {
     // Placeholder data for cabinets and medicines about to expire
     const cabinets = ['Cabinet 1', 'Cabinet 2', 'Cabinet 3'];
@@ -16,11 +17,12 @@ export default function Home() {
         {/* Your cabinets */}
         <div className="text-left mb-8">
           <h2 className="text-lg font-semibold mb-4">Your cabinets</h2>
+          <Link href="cabinet"><button className="ml-2 mb-3 bg-blue-500 text-white px-6 py-1 rounded">View Cabinet</button></Link>
           <ul className="space-y-2">
             {cabinets.map((cabinet, index) => (
               <li key={index}>
                 <span className="font-semibold">{cabinet}</span>
-                <button className="ml-2 bg-blue-500 text-white px-2 py-1 rounded">View Cabinet</button>
+                <Link href={`cabinet/${index}`}><button className="ml-2 bg-blue-500 text-white px-2 py-1 rounded">View Cabinet</button></Link>
               </li>
             ))}
           </ul>
@@ -35,6 +37,7 @@ export default function Home() {
                 <th className="border border-gray-300 px-4 py-2">Name</th>
                 <th className="border border-gray-300 px-4 py-2">Date</th>
                 <th className="border border-gray-300 px-4 py-2">Cabinet</th>
+                <th className="border border-gray-300 px-4 py-2">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -43,6 +46,9 @@ export default function Home() {
                   <td className="border border-gray-300 px-4 py-2">{medicine.name}</td>
                   <td className="border border-gray-300 px-4 py-2">{medicine.date}</td>
                   <td className="border border-gray-300 px-4 py-2">{medicine.cabinet}</td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    <Link href={`cabinet/${index}`}><button className="bg-blue-500 text-white px-2 py-1 rounded mr-2">View</button></Link>
+                  </td>
                 </tr>
               ))}
             </tbody>
