@@ -1,6 +1,31 @@
 "use client";
 import Link from 'next/link';
+import { supabase } from '@/lib/supabase';
+import { useEffect, useState } from 'react';
 export default function Page({params:{id}}) {
+
+      // State
+      const [cabinets, setCabinets] = useState([]);
+
+      const supaBaseCabinets = async () => {
+          const { data: medicinecabinets, error } = await supabase
+          .from('medicinecabinets')
+          .select()
+          .eq('cabinet_id', id);
+          if (medicinecabinets) {
+              setCabinets(medicinecabinets);
+          };
+          if (error) console.log('error', error);  
+      };
+      
+      useEffect(() => {
+        supaBaseCabinets();
+      }, []);
+
+      console.log(cabinets);
+      // Extrating the data from the array
+      const cabinetName = cabinets.length > 0 ? cabinets[0].name : '';
+      const cabinetDescription = cabinets.length > 0 ? cabinets[0].description : '';
  // Placeholder data for list of medicines
  const medicines = [
     { name: 'Medicine A', expirationDate: '2024-03-15', reminder: false },
@@ -11,7 +36,10 @@ export default function Page({params:{id}}) {
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col justify-center items-center">
       <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
-        <h1 className="text-3xl font-bold text-center mb-6">Cabinet {id}</h1>
+        <h1 className="text-3xl font-bold text-center mb-6">{cabinetName} Cabinet</h1>
+        <p className='text-3xl font-bold text-center mb-4'>
+          {cabinetDescription}
+        </p>
 
         {/* Add New Medicine Button */}
         <div className="text-right mb-4">
