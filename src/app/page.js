@@ -1,18 +1,27 @@
+"use client";
 import Link from "next/link";
 import {supabase} from "@/lib/supabase"
+import { useEffect, useState } from "react";
 export default function Home() {
+    // State
+    const [cabinets, setCabinets] = useState([]);
+
     const supaBaseCabinets = async () => {
         const { data:medicinecabinets, error } = await supabase
         .from('medicinecabinets')
         .select("*");
-        if (medicinecabinets) console.log('data', medicinecabinets);
-        if (error) console.log('error', error);
-        
+        if (medicinecabinets) {
+            setCabinets(medicinecabinets);
+        };
+        if (error) console.log('error', error);  
     };
     
-    supaBaseCabinets();
+    useEffect(() => {
+      supaBaseCabinets();
+    }, []);
+    
     // Placeholder data for cabinets and medicines about to expire
-    const cabinets = ['Cabinet 1', 'Cabinet 2', 'Cabinet 3'];
+    // const cabinets = ['Cabinet 1', 'Cabinet 2', 'Cabinet 3'];
     const medicinesAboutToExpire = [
       { name: 'Medicine A', date: '2024-03-15', cabinet: 'Cabinet 1' },
       { name: 'Medicine B', date: '2024-03-17', cabinet: 'Cabinet 2' },
@@ -32,10 +41,10 @@ export default function Home() {
           <h2 className="text-lg font-semibold mb-4">Your cabinets</h2>
           <Link href="cabinet"><button className="ml-2 mb-3 bg-blue-500 text-white px-6 py-1 rounded">View Cabinet</button></Link>
           <ul className="space-y-2">
-            {cabinets.map((cabinet, index) => (
-              <li key={index}>
-                <span className="font-semibold">{cabinet}</span>
-                <Link href={`cabinet/${index}`}><button className="ml-2 bg-blue-500 text-white px-2 py-1 rounded">View Cabinet</button></Link>
+            {cabinets.map((cabinet) => (
+              <li key={cabinet.cabinet_id}>
+                <span className="font-semibold">{cabinet.name}</span>
+                <Link href={`cabinet/${cabinet.cabinet_id}`}><button className="ml-2 bg-blue-500 text-white px-2 py-1 rounded">View Cabinet</button></Link>
               </li>
             ))}
           </ul>
