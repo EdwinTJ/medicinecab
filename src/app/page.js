@@ -31,6 +31,10 @@ export default function Home() {
         {/* Expire Soon */}
         <div className="text-left">
           <h2 className="text-lg font-semibold mb-4">Expire Soon</h2>
+                  {/* Add New Medicine Button */}
+        <div className="text-right mb-4">
+          <Link href="../medicine/create"><button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg focus:outline-none">Add New Medicine</button></Link>
+        </div>
           <table className="w-full border-collapse border border-gray-300">
             <thead className="bg-gray-200">
               <tr>

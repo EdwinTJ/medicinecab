@@ -1,4 +1,5 @@
-
+"use client";
+import Link from 'next/link';
 export default function Page({params:{id}}) {
  // Placeholder data for list of medicines
  const medicines = [
@@ -10,11 +11,11 @@ export default function Page({params:{id}}) {
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col justify-center items-center">
       <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
-        <h1 className="text-3xl font-bold text-center mb-6">Cabinet</h1>
+        <h1 className="text-3xl font-bold text-center mb-6">Cabinet {id}</h1>
 
         {/* Add New Medicine Button */}
         <div className="text-right mb-4">
-          <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg focus:outline-none">Add New Medicine</button>
+          <Link href="../medicine/create"><button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg focus:outline-none">Add New Medicine</button></Link>
         </div>
 
         {/* List of Medicines */}

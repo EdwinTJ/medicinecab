@@ -1,8 +1,6 @@
 "use client";
-
 import Link from "next/link";
-
-export default function Page() {
+export default  function Page() {
     // Placeholder data for cabinets
     const cabinets = ['Cabinet 1', 'Cabinet 2', 'Cabinet 3'];
 
