@@ -1,5 +1,16 @@
 import Link from "next/link";
+import {supabase} from "@/lib/supabase"
 export default function Home() {
+    const supaBaseCabinets = async () => {
+        const { data:medicinecabinets, error } = await supabase
+        .from('medicinecabinets')
+        .select("*");
+        if (medicinecabinets) console.log('data', medicinecabinets);
+        if (error) console.log('error', error);
+        
+    };
+    
+    supaBaseCabinets();
     // Placeholder data for cabinets and medicines about to expire
     const cabinets = ['Cabinet 1', 'Cabinet 2', 'Cabinet 3'];
     const medicinesAboutToExpire = [
@@ -7,6 +18,8 @@ export default function Home() {
       { name: 'Medicine B', date: '2024-03-17', cabinet: 'Cabinet 2' },
       { name: 'Medicine C', date: '2024-03-20', cabinet: 'Cabinet 3' },
     ];
+
+
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col">
     {/* Main content */}
