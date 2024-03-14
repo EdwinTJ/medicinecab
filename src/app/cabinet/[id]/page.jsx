@@ -22,7 +22,6 @@ export default function Page({params:{id}}) {
         supaBaseCabinets();
       }, []);
 
-      console.log(cabinets);
       // Extrating the data from the array
       const cabinetName = cabinets.length > 0 ? cabinets[0].name : '';
       const cabinetDescription = cabinets.length > 0 ? cabinets[0].description : '';

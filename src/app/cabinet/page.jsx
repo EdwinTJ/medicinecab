@@ -1,10 +1,29 @@
 "use client";
 import Link from "next/link";
+import { supabase } from "@/lib/supabase";
+import { useEffect, useState } from "react";
 export default  function Page() {
-    // Placeholder data for cabinets
-    const cabinets = ['Cabinet 1', 'Cabinet 2', 'Cabinet 3'];
+        // State
+        const [cabinets, setCabinets] = useState([]);
 
-  // Function to handle cabinet edit
+        const supaBaseCabinets = async () => {
+            const { data: medicinecabinets, error } = await supabase
+            .from('medicinecabinets')
+            .select("*");
+            if (medicinecabinets) {
+                setCabinets(medicinecabinets);
+            };
+            if (error) console.log('error', error);  
+        };
+        
+        useEffect(() => {
+          supaBaseCabinets();
+        }, []);
+  
+        // Extrating the data from the array
+        // const cabinetName = cabinets.length > 0 ? cabinets[0].name : '';
+  
+        // Function to handle cabinet edit
   const handleEditCabinet = (cabinet) => {
     // Placeholder function for editing cabinet
     console.log(`Editing ${cabinet}`);
@@ -35,13 +54,13 @@ export default  function Page() {
             </tr>
           </thead>
           <tbody>
-            {cabinets.map((cabinet, index) => (
-              <tr key={index}>
-                <td className="border border-gray-300 px-4 py-2">{cabinet}</td>
+            {cabinets.map((cabinet) => (
+              <tr key={cabinet.cabinet_id}>
+                <td className="border border-gray-300 px-4 py-2">{cabinet.name}</td>
                 <td className="border border-gray-300 px-4 py-2">
-                <Link href={`cabinet/${index}`}><button className="bg-yellow-500 text-white px-2 py-1 rounded mr-2">View</button></Link>
-                  <Link href={`cabinet/edit/${index}`}><button className="bg-green-500 text-white px-2 py-1 rounded mr-2">Edit</button></Link>
-                  <Link href={`cabinet/delete/${index}`}><button className="bg-red-500 text-white px-2 py-1 rounded">Delete</button></Link>
+                <Link href={`cabinet/${cabinet.cabinet_id}`}><button className="bg-yellow-500 text-white px-2 py-1 rounded mr-2">View</button></Link>
+                  <Link href={`cabinet/edit/${cabinet.cabinet_id}`}><button className="bg-green-500 text-white px-2 py-1 rounded mr-2">Edit</button></Link>
+                  <Link href={`cabinet/delete/${cabinet.cabinet_id}`}><button className="bg-red-500 text-white px-2 py-1 rounded">Delete</button></Link>
                 </td>
               </tr>
             ))}
