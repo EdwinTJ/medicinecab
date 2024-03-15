@@ -1,22 +1,53 @@
 "use client";
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
 export default function Page({params: {id}}) {
-      // Placeholder data for cabinet to be edited
-  const [cabinetName, setCabinetName] = useState('Cabinet 1');
-  const [cabinetDescription, setCabinetDescription] = useState('Description for Cabinet 1');
+ // State
+ const [cabinetName, setCabinetName] = useState('');
+ const [cabinetDescription, setCabinetDescription] = useState('');
 
-  const handleFormSubmit = (event) => {
+  useEffect(() => {
+    // Fetch cabinet details from Supabase and set local state
+    const fetchCabinetDetails = async () => {
+      const { data : medicinecabinets, error } = await supabase
+        .from('medicinecabinets')
+        .select()
+        .eq('cabinet_id', id)
+        .single();
+
+      if (medicinecabinets) {
+        setCabinetName(medicinecabinets.name);
+        setCabinetDescription(medicinecabinets.description);
+      }
+
+      if (error) {
+        console.error('Error fetching cabinet details:', error.message);
+      }
+    };
+
+    fetchCabinetDetails();
+  }, [id]); // Fetch cabinet details whenever `id` changes
+
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
-    // Placeholder function for handling form submission
-    console.log('Updated Cabinet Name:', cabinetName);
-    console.log('Updated Cabinet Description:', cabinetDescription);
-    // You can add your logic here to submit the updated form data
+
+    // Update cabinet details in Supabase
+    const { error } = await supabase
+      .from('medicinecabinets')
+      .update({ name: cabinetName, description: cabinetDescription })
+      .eq('cabinet_id', id);
+
+    if (error) {
+      console.error('Error updating cabinet:', error.message);
+    } else {
+      console.log('Cabinet updated successfully!');
+    }
   };
 
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col justify-center items-center">
       <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
-        <h1 className="text-3xl font-bold text-center mb-6">Edit Cabinet {id}</h1>
+        <h1 className="text-3xl font-bold text-center mb-6">Edit Cabinet {cabinetName}</h1>
         <form onSubmit={handleFormSubmit}>
           <div className="mb-4">
             <label htmlFor="cabinetName" className="block text-gray-700 font-semibold mb-2">Name</label>
