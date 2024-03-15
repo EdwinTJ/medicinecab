@@ -1,15 +1,48 @@
 "use client"
-import { useState } from 'react';
-
+import { useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabase';
 export default function Page({params: {id}}) {
-     // Placeholder data for cabinet to be deleted
-  const cabinetName = 'Cabinet 1';
+  const [cabinetName, setCabinetName] = useState('');
 
-  const handleDelete = () => {
-    // Placeholder function for handling cabinet deletion
-    console.log(`Deleting cabinet: ${cabinetName}`);
-    // You can add your logic here to delete the cabinet
+  // Fetch cabinet details from Supabase
+  const fetchCabinetDetails = async () => {
+    try {
+      const { data: medicinecabinets, error } = await supabase
+        .from('medicinecabinets')
+        .select('name')
+        .eq('cabinet_id', id)
+        .single();
+
+      if (error) {
+        throw error;
+      }
+
+      if (medicinecabinets) {
+        setCabinetName(medicinecabinets.name);
+      }
+    } catch (error) {
+      console.error('Error fetching cabinet details:', error.message);
+    }
   };
+
+  const handleDelete = async () => {
+    try {
+      // Delete cabinet from Supabase
+      const { error } = await supabase
+        .from('medicinecabinets')
+        .delete()
+        .eq('cabinet_id', id);
+
+      if (error) {
+        throw error;
+      }
+      console.log(`Cabinet ${id} deleted successfully`);
+    } catch (error) {
+      console.error('Error deleting cabinet:', error.message);
+    }
+  };
+
+  useEffect(() => {fetchCabinetDetails();}, []);
 
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col justify-center items-center">
