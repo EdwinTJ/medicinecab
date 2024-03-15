@@ -1,7 +1,10 @@
 "use client";
-import { useState ,useEffect} from 'react';
+import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import { useRouter } from 'next/navigation';
 export default function Page() {
+  const router = useRouter();
+
   // State
   const [user_id, setUser_id] = useState('');
   const [cabinetName, setCabinetName] = useState('');
@@ -16,7 +19,6 @@ export default function Page() {
 
     if (data) {
       console.log('Cabinet created successfully:', data);
-        location.reload();
     }
 
     if (error) {
@@ -27,14 +29,8 @@ export default function Page() {
   const handleFormSubmit = (event) => {
     event.preventDefault();
     supaBaseCabinets();
+    router.push('/cabinet');
   };
-
-  useEffect(() => {
-    // Reset form inputs after successful submission
-    setUser_id('');
-    setCabinetName('');
-    setCabinetDescription('');
-  }, []); // Reset inputs when router path changes
 
 
     return( 

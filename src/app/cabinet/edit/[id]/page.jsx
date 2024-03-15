@@ -1,7 +1,9 @@
 "use client";
 import { useState,useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
+import { useRouter } from 'next/navigation';
 export default function Page({params: {id}}) {
+  const router = useRouter();
  // State
  const [cabinetName, setCabinetName] = useState('');
  const [cabinetDescription, setCabinetDescription] = useState('');
@@ -41,6 +43,7 @@ export default function Page({params: {id}}) {
       console.error('Error updating cabinet:', error.message);
     } else {
       console.log('Cabinet updated successfully!');
+      router.push('/cabinet');
     }
   };
 

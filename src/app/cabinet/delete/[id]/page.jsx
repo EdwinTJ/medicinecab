@@ -1,9 +1,10 @@
 "use client"
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import { useRouter } from "next/navigation"
 export default function Page({params: {id}}) {
   const [cabinetName, setCabinetName] = useState('');
-
+  const router = useRouter();
   // Fetch cabinet details from Supabase
   const fetchCabinetDetails = async () => {
     try {
@@ -37,6 +38,7 @@ export default function Page({params: {id}}) {
         throw error;
       }
       console.log(`Cabinet ${id} deleted successfully`);
+      router.push('/cabinet');
     } catch (error) {
       console.error('Error deleting cabinet:', error.message);
     }
