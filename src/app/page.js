@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 export default function Home() {
     // State
     const [cabinets, setCabinets] = useState([]);
+    const [medicines, setMedicines] = useState([]);
 
     const supaBaseCabinets = async () => {
         const { data:medicinecabinets, error } = await supabase
@@ -16,18 +17,25 @@ export default function Home() {
         if (error) console.log('error', error);  
     };
     
+    const supaBaseMedicines = async () => {
+        const { data:medicines, error } = await supabase
+        .from('medicines')
+        .select("*");
+        if (medicines) {
+            setMedicines(medicines);
+        };
+        if (error) console.log('error', error);  
+    };
+
     useEffect(() => {
       supaBaseCabinets();
+      supaBaseMedicines();
     }, []);
     
-    // Placeholder data for cabinets and medicines about to expire
-    // const cabinets = ['Cabinet 1', 'Cabinet 2', 'Cabinet 3'];
-    const medicinesAboutToExpire = [
-      { name: 'Medicine A', date: '2024-03-15', cabinet: 'Cabinet 1' },
-      { name: 'Medicine B', date: '2024-03-17', cabinet: 'Cabinet 2' },
-      { name: 'Medicine C', date: '2024-03-20', cabinet: 'Cabinet 3' },
-    ];
-
+    const getCabinetNameById = (cabinetId) => {
+      const cabinet = cabinets.find((cabinet) => cabinet.cabinet_id === cabinetId);
+      return cabinet ? cabinet.name : "";
+    };
 
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col">
@@ -67,13 +75,13 @@ export default function Home() {
               </tr>
             </thead>
             <tbody>
-              {medicinesAboutToExpire.map((medicine, index) => (
-                <tr key={index}>
-                  <td className="border border-gray-300 px-4 py-2">{medicine.name}</td>
-                  <td className="border border-gray-300 px-4 py-2">{medicine.date}</td>
-                  <td className="border border-gray-300 px-4 py-2">{medicine.cabinet}</td>
+              {medicines.map((medicine) => (
+                <tr key={medicine.medicine_id}>
+                  <td className="border border-gray-300 px-4 py-2">{medicine.medicine_name}</td>
+                  <td className="border border-gray-300 px-4 py-2">{medicine.expiration_date}</td>
+                  <td className="border border-gray-300 px-4 py-2">{getCabinetNameById(medicine.cabinet_id)}</td>
                   <td className="border border-gray-300 px-4 py-2">
-                    <Link href={`cabinet/${index}`}><button className="bg-blue-500 text-white px-2 py-1 rounded mr-2">View</button></Link>
+                    <Link href={`cabinet/${medicine.medicine_id}`}><button className="bg-blue-500 text-white px-2 py-1 rounded mr-2">View</button></Link>
                   </td>
                 </tr>
               ))}

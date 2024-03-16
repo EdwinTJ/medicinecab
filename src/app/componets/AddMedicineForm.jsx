@@ -1,19 +1,36 @@
 "use client";
-import { useState } from 'react';
-
+import { useState} from 'react';
+import { supabase } from '@/lib/supabase';
+import { useRouter } from 'next/navigation';
 // AddMedicineForm component for adding a new medicine
 const AddMedicineForm = ({ cabinets }) => {
+  const router = useRouter();
   const [medicineName, setMedicineName] = useState('');
   const [expirationDate, setExpirationDate] = useState('');
   const [selectedCabinet, setSelectedCabinet] = useState('');
 
+  const supabaseCreteaMedicine = async ()=>{
+    const {data,error } = await supabase
+  .from('medicines')
+  .insert([
+    {medicine_name:medicineName,expiration_date:expirationDate,cabinet_id:selectedCabinet}
+  ]);
+
+  if (data) {
+    console.log('Cabinet created successfully:', data);
+  }
+
+  if (error) {
+    console.error('Error creating cabinet:', error);
+  }
+
+}
+
+  console.log('Cabinets:', cabinets);
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    // Placeholder function for handling form submission
-    console.log('Medicine Name:', medicineName);
-    console.log('Expiration Date:', expirationDate);
-    console.log('Selected Cabinet:', selectedCabinet);
-    // You can add your logic here to submit the form data
+    supabaseCreteaMedicine();
+    router.push('/');
   };
 
   return (
@@ -30,8 +47,8 @@ const AddMedicineForm = ({ cabinets }) => {
         <label htmlFor="selectedCabinet" className="block text-gray-700 font-semibold mb-2">Cabinet</label>
         <select id="selectedCabinet" value={selectedCabinet} onChange={(e) => setSelectedCabinet(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500" required>
           <option value="">Select Cabinet</option>
-          {cabinets.map((cabinet, index) => (
-            <option key={index} value={cabinet}>{cabinet}</option>
+          {cabinets.map((cabinet) => (
+            <option key={cabinet.cabinet_id} value={cabinet.cabinet_id}>{cabinet.name}</option>
           ))}
         </select>
       </div>
