@@ -6,6 +6,7 @@ export default function Page({params:{id}}) {
 
       // State
       const [cabinets, setCabinets] = useState([]);
+      const [medicines, setMedicines] = useState([]);
 
       const supaBaseCabinets = async () => {
           const { data: medicinecabinets, error } = await supabase
@@ -17,20 +18,29 @@ export default function Page({params:{id}}) {
           };
           if (error) console.log('error', error);  
       };
+
+      const supaBaseMedicines = async () => {
+          const { data: medicines, error } = await supabase
+          .from('medicines')
+          .select()
+          .eq('cabinet_id', id);
+          if (medicines) {
+              setMedicines(medicines);
+          };
+          if (error) console.log('error', error);
+      };
       
       useEffect(() => {
         supaBaseCabinets();
+        supaBaseMedicines();
       }, []);
 
+
+      
       // Extrating the data from the array
       const cabinetName = cabinets.length > 0 ? cabinets[0].name : '';
       const cabinetDescription = cabinets.length > 0 ? cabinets[0].description : '';
- // Placeholder data for list of medicines
- const medicines = [
-    { name: 'Medicine A', expirationDate: '2024-03-15', reminder: false },
-    { name: 'Medicine B', expirationDate: '2024-03-17', reminder: true },
-    { name: 'Medicine C', expirationDate: '2024-03-20', reminder: false },
-  ];
+
 
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col justify-center items-center">
@@ -46,26 +56,31 @@ export default function Page({params:{id}}) {
         </div>
 
         {/* List of Medicines */}
+        {/* List of Medicines or Cabinet empty */}
         <div className="mb-6">
           <h2 className="text-lg font-semibold mb-2">List of Medicines</h2>
-          <table className="w-full border-collapse border border-gray-300">
-            <thead className="bg-gray-200">
-              <tr>
-                <th className="border border-gray-300 px-4 py-2">Name</th>
-                <th className="border border-gray-300 px-4 py-2">Expiration Date</th>
-                <th className="border border-gray-300 px-4 py-2">Reminder</th>
-              </tr>
-            </thead>
-            <tbody>
-              {medicines.map((medicine, index) => (
-                <tr key={index}>
-                  <td className="border border-gray-300 px-4 py-2">{medicine.name}</td>
-                  <td className="border border-gray-300 px-4 py-2">{medicine.expirationDate}</td>
-                  <td className="border border-gray-300 px-4 py-2">{medicine.reminder ? 'Yes' : 'No'}</td>
+          {medicines.length > 0 ? (
+            <table className="w-full border-collapse border border-gray-300">
+              <thead className="bg-gray-200">
+                <tr>
+                  <th className="border border-gray-300 px-4 py-2">Name</th>
+                  <th className="border border-gray-300 px-4 py-2">Expiration Date</th>
+                  <th className="border border-gray-300 px-4 py-2">Reminder</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {medicines.map((medicine, index) => (
+                  <tr key={index}>
+                    <td className="border border-gray-300 px-4 py-2">{medicine.medicine_name}</td>
+                    <td className="border border-gray-300 px-4 py-2">{medicine.expiration_date}</td>
+                    <td className="border border-gray-300 px-4 py-2">{medicine.reminder ? 'Yes' : 'No'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p>Cabinet empty</p>
+          )}
         </div>
       </div>
     </div>
