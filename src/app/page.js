@@ -69,7 +69,7 @@ export default function Home() {
             <thead className="bg-gray-200">
               <tr>
                 <th className="border border-gray-300 px-4 py-2">Name</th>
-                <th className="border border-gray-300 px-4 py-2">Date</th>
+                <th className="border border-gray-300 px-4 py-2">Expiration Date</th>
                 <th className="border border-gray-300 px-4 py-2">Cabinet</th>
                 <th className="border border-gray-300 px-4 py-2">Actions</th>
               </tr>
@@ -81,7 +81,7 @@ export default function Home() {
                   <td className="border border-gray-300 px-4 py-2">{medicine.expiration_date}</td>
                   <td className="border border-gray-300 px-4 py-2">{getCabinetNameById(medicine.cabinet_id)}</td>
                   <td className="border border-gray-300 px-4 py-2">
-                    <Link href={`cabinet/${medicine.medicine_id}`}><button className="bg-blue-500 text-white px-2 py-1 rounded mr-2">View</button></Link>
+                    <Link href={`cabinet/${medicine.cabinet_id}`}><button className="bg-blue-500 text-white px-2 py-1 rounded mr-2">View</button></Link>
                   </td>
                 </tr>
               ))}
