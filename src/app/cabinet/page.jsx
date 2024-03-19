@@ -21,10 +21,9 @@ export default  function Page() {
         }, []);
   
   return(
-    <div className="bg-gray-100 min-h-screen flex flex-col">
-
+    <>
     {/* Main content */}
-    <main className="flex-grow flex items-center justify-center">
+    <main className="flex-grow flex items-center justify-center px-1">
     <div className="max-w-lg w-full text-center">
       <h1 className="text-3xl font-bold mb-8">Cabinets</h1>
       
@@ -54,6 +53,6 @@ export default  function Page() {
       </div>
     </div>
   </main>
-  </div>
-  );
+</>
+);
 }
