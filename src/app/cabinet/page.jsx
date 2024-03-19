@@ -20,21 +20,6 @@ export default  function Page() {
           supaBaseCabinets();
         }, []);
   
-        // Extrating the data from the array
-        // const cabinetName = cabinets.length > 0 ? cabinets[0].name : '';
-  
-        // Function to handle cabinet edit
-  const handleEditCabinet = (cabinet) => {
-    // Placeholder function for editing cabinet
-    console.log(`Editing ${cabinet}`);
-  };
-
-  // Function to handle cabinet delete
-  const handleDeleteCabinet = (cabinet) => {
-    // Placeholder function for deleting cabinet
-    console.log(`Deleting ${cabinet}`);
-  };
-
   return(
     <div className="bg-gray-100 min-h-screen flex flex-col">
 
