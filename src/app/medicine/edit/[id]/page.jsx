@@ -75,9 +75,11 @@ export default function EditMedicinePage({ params: { id } }) {
         }
     };
 
-    return (
-        <div className="mx-auto max-w-md p-6 bg-white rounded-md shadow-md">
-            <h1 className="text-2xl font-semibold mb-4">Edit Medicine</h1>
+    return (<>
+        <main className="flex-grow flex items-center justify-center px-1">
+
+        <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
+            <h1 className="text-3xl font-bold text-center mb-6">Edit Medicine</h1>
             {medicine ? (
                 <form onSubmit={handleFormSubmit}>
                     <div className="mb-4">
@@ -121,5 +123,7 @@ export default function EditMedicinePage({ params: { id } }) {
                 <p>Loading...</p>
             )}
         </div>
+        </main>
+        </>
     );
 }

@@ -34,7 +34,7 @@ const AddMedicineForm = ({ cabinets }) => {
   };
 
   return (
-    <form onSubmit={handleFormSubmit} className="mb-6">
+    <form onSubmit={handleFormSubmit}>
       <div className="mb-4">
         <label htmlFor="medicineName" className="block text-gray-700 font-semibold mb-2">Name</label>
         <input type="text" id="medicineName" value={medicineName} onChange={(e) => setMedicineName(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500" required />
