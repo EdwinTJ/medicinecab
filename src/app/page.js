@@ -37,6 +37,8 @@ export default function Home() {
       return cabinet ? cabinet.name : "";
     };
 
+    console.log(medicines);
+
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col">
     {/* Main content */}
@@ -65,28 +67,32 @@ export default function Home() {
         <div className="text-right mb-4">
           <Link href="../medicine/create"><button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg focus:outline-none">Add New Medicine</button></Link>
         </div>
+        
           <table className="w-full border-collapse border border-gray-300">
-            <thead className="bg-gray-200">
-              <tr>
-                <th className="border border-gray-300 px-4 py-2">Name</th>
-                <th className="border border-gray-300 px-4 py-2">Expiration Date</th>
-                <th className="border border-gray-300 px-4 py-2">Cabinet</th>
-                <th className="border border-gray-300 px-4 py-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {medicines.map((medicine) => (
+          <thead className="bg-gray-200">
+            <tr>
+              <th className="border border-gray-300 px-4 py-2">Name</th>
+              <th className="border border-gray-300 px-4 py-2">Expiration</th>
+              <th className="border border-gray-300 px-4 py-2">Cabinet</th>
+              <th className="border border-gray-300 px-4 py-2">Actions</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            {medicines.map((medicine) => (
                 <tr key={medicine.medicine_id}>
-                  <td className="border border-gray-300 px-4 py-2">{medicine.medicine_name}</td>
-                  <td className="border border-gray-300 px-4 py-2">{medicine.expiration_date}</td>
-                  <td className="border border-gray-300 px-4 py-2">{getCabinetNameById(medicine.cabinet_id)}</td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    <Link href={`cabinet/${medicine.cabinet_id}`}><button className="bg-blue-500 text-white px-2 py-1 rounded mr-2">View</button></Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                <td className="border border-gray-300 px-4 py-2">{medicine.medicine_name}</td>
+                <td className="border border-gray-300 px-4 py-2">{medicine.expiration_date}</td>
+                <td className="border border-gray-300 px-4 py-2">{getCabinetNameById(medicine.cabinet_id)}</td>
+
+                <td className="border border-gray-300 px-4 py-2">
+                  <Link href={`medicine/edit/${medicine.medicine_id}`}><button className="bg-green-500 text-white px-2 py-1 rounded mr-2">Edit</button></Link>
+                  <Link href={`medicine/delete/${medicine.medicine_id}`}><button className="bg-red-500 text-white px-2 py-1 rounded">Delete</button></Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
         </div>
       </div>
     </main>
