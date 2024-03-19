@@ -64,7 +64,10 @@ export default function Home() {
         <div className="text-left">
           <h2 className="text-lg font-semibold mb-4">Expire Soon</h2>
                   {/* Add New Medicine Button */}
-        <div className="text-right mb-4">
+        <div >
+          <Link href="../medicine"><button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg focus:outline-none">View All</button></Link>
+        </div>
+        <div className="text-right mb-2">
           <Link href="../medicine/create"><button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg focus:outline-none">Add New Medicine</button></Link>
         </div>
         

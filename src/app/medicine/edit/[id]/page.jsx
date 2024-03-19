@@ -68,7 +68,7 @@ export default function EditMedicinePage({ params: { id } }) {
             }
             else{
                 console.log('Medicine updated successfully!');
-                router.push('/');   
+                router.push(`/cabinet/${medicine.cabinet_id}`);   
             }
         } catch (error) {
             console.error('Error updating medicine:', error.message);
