@@ -7,6 +7,7 @@ export default function Home() {
     const [cabinets, setCabinets] = useState([]);
     const [medicines, setMedicines] = useState([]);
 
+
     const supaBaseCabinets = async () => {
         const { data:medicinecabinets, error } = await supabase
         .from('medicinecabinets')
@@ -41,9 +42,8 @@ export default function Home() {
       {/* Main content */}
       <main className="flex-grow flex items-center justify-center px-1">
         <div className="max-w-lg w-full text-center">
-          <h1 className="text-3xl font-bold mb-8">Welcome to Medicine Cab</h1>
-          
-          {/* Your cabinets */}
+        <h1 className="text-3xl font-bold mb-8">Welcome to Medicine Cab</h1>
+        {/* Your cabinets */}
           <div className="flex justify-center">
             <div className="text-left mb-8">
                 <h2 className="text-lg font-semibold mb-4">Your cabinets</h2>
@@ -63,6 +63,10 @@ export default function Home() {
             </div>
           </div>
   
+          <Link href="auth/signup">
+              <button className="ml-2 mb-3 bg-blue-500 text-white px-6 py-1 rounded">Signup</button>
+            </Link>
+
           {/* Expire Soon */}
           <div className="text-left">
           <h2 className="text-lg font-semibold mb-4">Expire Soon</h2></div>
