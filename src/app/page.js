@@ -2,20 +2,27 @@
 import Link from "next/link";
 import {supabase} from "@/lib/supabase"
 import { useEffect, useState } from "react";
+import { useRouter } from 'next/navigation';
+
 export default function Home() {
-    // State
-    const [cabinets, setCabinets] = useState([]);
-    const [medicines, setMedicines] = useState([]);
-    const [user, setUser] = useState(null);
+      // State
+      const [cabinets, setCabinets] = useState([]);
+      const [medicines, setMedicines] = useState([]);
+      const [user, setUser] = useState(null);
+      const [session, setSession] = useState(null);
+  // Redirect if user is logged in
+  const router = useRouter();
+  const isSession = async () =>{
+    const { data:{session}} = await supabase.auth.getSession();
+    if(session){
+      setSession(session);
+    setUser(session.user);}
 
-    const getUser = async () => {  
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        setUser(user);
-      }
-
-    };
-
+    if(!session){
+      router.push("/unauth");
+  }
+  };
+    
     const supaBaseCabinets = async () => {
         const { data:medicinecabinets, error } = await supabase
         .from('medicinecabinets')
@@ -23,7 +30,7 @@ export default function Home() {
         if (medicinecabinets) {
             setCabinets(medicinecabinets);
         };
-        if (error) console.log('error', error);  
+        if (error) console.log('error cabinets', error);  
     };
     
     const supaBaseMedicines = async () => {
@@ -33,13 +40,13 @@ export default function Home() {
         if (medicines) {
             setMedicines(medicines);
         };
-        if (error) console.log('error', error);  
+        if (error) console.log('error mediciens', error);  
     };
 
     useEffect(() => {
       supaBaseCabinets();
       supaBaseMedicines();
-      getUser();
+      isSession();
     }, []);
     
     const getCabinetNameById = (cabinetId) => {
@@ -78,45 +85,51 @@ export default function Home() {
                         </div>
                     </div>
                 ) : (
-                    <p>Please login to see your cabinets</p>
+<></>
                 )}
 
           {/* Expire Soon */}
-          <div className="text-left">
-          <h2 className="text-lg font-semibold mb-4">Expire Soon</h2></div>
-          <div className="flex justify-end items-center mb-2">
-            <div className="text-right mb-2">
-              <Link href="../medicine"><button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold mr-2 px-4 py-2 rounded-lg focus:outline-none">View All</button></Link>
-            </div>
-            <div className="text-right mb-2">
-              <Link href="../medicine/create"><button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg focus:outline-none">Add New Medicine</button></Link>
-            </div>
-          </div>
-            <table className="w-full border-collapse border border-gray-300">
-            <thead className="bg-gray-200">
-              <tr>
-                <th className="border border-gray-300 px-4 py-2">Name</th>
-                <th className="border border-gray-300 px-4 py-2">Expiration</th>
-                <th className="border border-gray-300 px-4 py-2">Cabinet</th>
-                <th className="border border-gray-300 px-4 py-2">Actions</th>
-  
-              </tr>
-            </thead>
-            <tbody>
-              {medicines.map((medicine) => (
-                  <tr key={medicine.medicine_id}>
-                  <td className="border border-gray-300 px-4 py-2">{medicine.medicine_name}</td>
-                  <td className="border border-gray-300 px-4 py-2">{medicine.expiration_date}</td>
-                  <td className="border border-gray-300 px-4 py-2">{getCabinetNameById(medicine.cabinet_id)}</td>
-  
-                  <td className="border border-gray-300 px-4 py-2">
-                    <Link href={`medicine/edit/${medicine.medicine_id}`}><button className="bg-green-500 text-white px-2 py-1 rounded mr-2">Edit</button></Link>
-                    <Link href={`medicine/delete/${medicine.medicine_id}`}><button className="bg-red-500 text-white px-2 py-1 rounded">Delete</button></Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          {user ? (
+                 <>
+                      <div className="text-left">
+                      <h2 className="text-lg font-semibold mb-4">Expire Soon</h2>
+                      </div>
+                      <div className="flex justify-end items-center mb-2">
+                        <div className="text-right mb-2">
+                          <Link href="../medicine"><button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold mr-2 px-4 py-2 rounded-lg focus:outline-none">View All</button></Link>
+                        </div>
+                        <div className="text-right mb-2">
+                          <Link href="../medicine/create"><button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg focus:outline-none">Add New Medicine</button></Link>
+                        </div>
+                      </div>
+                        <table className="w-full border-collapse border border-gray-300">
+                        <thead className="bg-gray-200">
+                          <tr>
+                            <th className="border border-gray-300 px-4 py-2">Name</th>
+                            <th className="border border-gray-300 px-4 py-2">Expiration</th>
+                            <th className="border border-gray-300 px-4 py-2">Cabinet</th>
+                            <th className="border border-gray-300 px-4 py-2">Actions</th>
+              
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {medicines.map((medicine) => (
+                              <tr key={medicine.medicine_id}>
+                              <td className="border border-gray-300 px-4 py-2">{medicine.medicine_name}</td>
+                              <td className="border border-gray-300 px-4 py-2">{medicine.expiration_date}</td>
+                              <td className="border border-gray-300 px-4 py-2">{getCabinetNameById(medicine.cabinet_id)}</td>
+              
+                              <td className="border border-gray-300 px-4 py-2">
+                                <Link href={`medicine/edit/${medicine.medicine_id}`}><button className="bg-green-500 text-white px-2 py-1 rounded mr-2">Edit</button></Link>
+                                <Link href={`medicine/delete/${medicine.medicine_id}`}><button className="bg-red-500 text-white px-2 py-1 rounded">Delete</button></Link>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table></>
+          ) : (
+           <></>
+          )}
           
         </div>
       </main>
