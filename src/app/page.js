@@ -6,7 +6,15 @@ export default function Home() {
     // State
     const [cabinets, setCabinets] = useState([]);
     const [medicines, setMedicines] = useState([]);
+    const [user, setUser] = useState(null);
 
+    const getUser = async () => {  
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setUser(user);
+      }
+
+    };
 
     const supaBaseCabinets = async () => {
         const { data:medicinecabinets, error } = await supabase
@@ -31,6 +39,7 @@ export default function Home() {
     useEffect(() => {
       supaBaseCabinets();
       supaBaseMedicines();
+      getUser();
     }, []);
     
     const getCabinetNameById = (cabinetId) => {
@@ -43,29 +52,34 @@ export default function Home() {
       <main className="flex-grow flex items-center justify-center px-1">
         <div className="max-w-lg w-full text-center">
         <h1 className="text-3xl font-bold mb-8">Welcome to Medicine Cab</h1>
+        {user ? (
+            <p>Hello, {user.email}</p>
+          ) : (
+            <p>Hello, Please Login</p>
+          )}
         {/* Your cabinets */}
-          <div className="flex justify-center">
-            <div className="text-left mb-8">
-                <h2 className="text-lg font-semibold mb-4">Your cabinets</h2>
-                <Link href="cabinet">
-                    <button className="ml-2 mb-3 bg-blue-500 text-white px-6 py-1 rounded">View Cabinet</button>
-                </Link>
-                <ul className="space-y-2">
-                    {cabinets.map((cabinet) => (
-                        <li key={cabinet.cabinet_id}>
-                            <span className="font-semibold">{cabinet.name}</span>
-                            <Link href={`cabinet/${cabinet.cabinet_id}`}>
-                                <button className="ml-2 bg-blue-500 text-white px-2 py-1 rounded">View Cabinet</button>
+   {user ? (
+                    <div className="flex justify-center">
+                        <div className="text-left mb-8">
+                            <h2 className="text-lg font-semibold mb-4">Your cabinets</h2>
+                            <Link href="cabinet">
+                                <button className="ml-2 mb-3 bg-blue-500 text-white px-6 py-1 rounded">View Cabinet</button>
                             </Link>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-          </div>
-  
-          <Link href="auth/signup">
-              <button className="ml-2 mb-3 bg-blue-500 text-white px-6 py-1 rounded">Signup</button>
-            </Link>
+                            <ul className="space-y-2">
+                                {cabinets.map((cabinet) => (
+                                    <li key={cabinet.cabinet_id}>
+                                        <span className="font-semibold">{cabinet.name}</span>
+                                        <Link href={`cabinet/${cabinet.cabinet_id}`}>
+                                            <button className="ml-2 bg-blue-500 text-white px-2 py-1 rounded">View Cabinet</button>
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                ) : (
+                    <p>Please login to see your cabinets</p>
+                )}
 
           {/* Expire Soon */}
           <div className="text-left">
