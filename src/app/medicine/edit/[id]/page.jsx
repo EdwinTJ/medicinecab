@@ -5,7 +5,13 @@ import { useRouter } from 'next/navigation';
 
 export default function EditMedicinePage({ params: { id } }) {
     const router = useRouter();
-
+    const isSession = async () =>{
+        const { data:{session}} = await supabase.auth.getSession();
+    
+        if(!session){
+          router.push("/auth");
+      }
+      };
     const [medicine, setMedicine] = useState(null);
     const [medicineName, setMedicineName] = useState('');
     const [expirationDate, setExpirationDate] = useState('');
@@ -47,6 +53,7 @@ export default function EditMedicinePage({ params: { id } }) {
       }; 
 
     useEffect(() => {
+        isSession();
         fetchMedicine();
         fetchCabinets();
 

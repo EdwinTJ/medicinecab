@@ -2,10 +2,19 @@
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 export default  function Page() {
         // State
         const [cabinets, setCabinets] = useState([]);
+        const router = useRouter();
+        const isSession = async () =>{
+          const { data:{session}} = await supabase.auth.getSession();
 
+          if(!session){
+            router.push("/auth");
+        }
+        };
+        
         const supaBaseCabinets = async () => {
             const { data: medicinecabinets, error } = await supabase
             .from('medicinecabinets')
@@ -18,6 +27,7 @@ export default  function Page() {
         
         useEffect(() => {
           supaBaseCabinets();
+          isSession();
         }, []);
   
   return(

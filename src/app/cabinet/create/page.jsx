@@ -1,10 +1,16 @@
 "use client";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 export default function Page() {
   const router = useRouter();
+  const isSession = async () =>{
+    const { data:{session}} = await supabase.auth.getSession();
 
+    if(!session){
+      router.push("/auth");
+  }
+  };
   // State
   const [user_id, setUser_id] = useState('');
   const [cabinetName, setCabinetName] = useState('');
@@ -32,6 +38,7 @@ export default function Page() {
     router.push('/cabinet');
   };
 
+  useEffect(() => {isSession();}, []);
 
     return( 
       <>

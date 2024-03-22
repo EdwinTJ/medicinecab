@@ -12,6 +12,14 @@ export default function Page({params: {id}}) {
     const [selectedCabinetId, setSelectedCabinetId] = useState('');
     const [cabinets, setCabinets] = useState([]);
     
+    const isSession = async () =>{
+        const { data:{session}} = await supabase.auth.getSession();
+    
+        if(!session){
+          router.push("/auth");
+      }
+      };
+
     const fetchMedicine = async () => {
         try {
         const { data: medicine, error } = await supabase
@@ -47,6 +55,7 @@ export default function Page({params: {id}}) {
     };
     
     useEffect(() => {
+        isSession();
         fetchMedicine();
         fetchCabinets();
     }, []);

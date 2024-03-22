@@ -9,17 +9,15 @@ export default function Home() {
       const [cabinets, setCabinets] = useState([]);
       const [medicines, setMedicines] = useState([]);
       const [user, setUser] = useState(null);
-      const [session, setSession] = useState(null);
   // Redirect if user is logged in
   const router = useRouter();
   const isSession = async () =>{
     const { data:{session}} = await supabase.auth.getSession();
     if(session){
-      setSession(session);
     setUser(session.user);}
 
     if(!session){
-      router.push("/unauth");
+      router.push("auth");
   }
   };
     

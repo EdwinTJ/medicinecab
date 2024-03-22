@@ -5,6 +5,13 @@ import { useRouter } from "next/navigation"
 export default function Page({params: {id}}) {
   const [cabinetName, setCabinetName] = useState('');
   const router = useRouter();
+  const isSession = async () =>{
+    const { data:{session}} = await supabase.auth.getSession();
+
+    if(!session){
+      router.push("/auth");
+  }
+  };
   // Fetch cabinet details from Supabase
   const fetchCabinetDetails = async () => {
     try {
@@ -44,7 +51,7 @@ export default function Page({params: {id}}) {
     }
   };
 
-  useEffect(() => {fetchCabinetDetails();}, []);
+  useEffect(() => {fetchCabinetDetails();isSession();}, []);
 
   return (
     <>

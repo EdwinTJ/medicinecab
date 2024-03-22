@@ -2,10 +2,22 @@
 import AddMedicineForm from "@/app/componets/AddMedicineForm";
 import { supabase } from "@/lib/supabase";
 import { useState, useEffect } from "react";
+import { useRouter } from 'next/navigation';
+
 // Page component including the AddMedicineForm
 export default  function Page ({ params: { id } }) {
+  const router = useRouter();
+
   const [cabinets, setCabinets] = useState([]);
-  
+
+  const isSession = async () =>{
+    const { data:{session}} = await supabase.auth.getSession();
+
+    if(!session){
+      router.push("/auth");
+  }
+  };
+
   const fetchCabinets = async () => {
     try {
       const { data, error } = await supabase.from('medicinecabinets').select('*');
@@ -22,6 +34,7 @@ export default  function Page ({ params: { id } }) {
   }; 
 
   useEffect(() => {
+      isSession();
     fetchCabinets();
   }, []);
   return (

@@ -1,11 +1,20 @@
 "use client";
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
-
+import { useRouter } from 'next/navigation';
 const MedicinesTable = () => {
+    const router = useRouter();
+
     const [cabinets, setCabinets] = useState([]);
     const [medicines, setMedicines] = useState([]);
 
+    const isSession = async () =>{
+        const { data:{session}} = await supabase.auth.getSession();
+    
+        if(!session){
+          router.push("/auth");
+      }
+      };
     const supaBaseCabinets = async () => {
         const { data:medicinecabinets, error } = await supabase
         .from('medicinecabinets')
@@ -27,8 +36,10 @@ const MedicinesTable = () => {
     };
 
     useEffect(() => {
-      supaBaseCabinets();
-      supaBaseMedicines();
+        isSession();
+        supaBaseCabinets();
+        supaBaseMedicines();
+        
     }, []);
 
       

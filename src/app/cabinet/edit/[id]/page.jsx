@@ -4,6 +4,14 @@ import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 export default function Page({params: {id}}) {
   const router = useRouter();
+  const isSession = async () =>{
+    const { data:{session}} = await supabase.auth.getSession();
+
+    if(!session){
+      router.push("/auth");
+  }
+  };
+  
  // State
  const [cabinetName, setCabinetName] = useState('');
  const [cabinetDescription, setCabinetDescription] = useState('');
@@ -26,8 +34,9 @@ export default function Page({params: {id}}) {
         console.error('Error fetching cabinet details:', error.message);
       }
     };
-
+    
     fetchCabinetDetails();
+    isSession();
   }, [id]); // Fetch cabinet details whenever `id` changes
 
   const handleFormSubmit = async (event) => {
