@@ -11,42 +11,47 @@ export default function Home() {
       const [user, setUser] = useState(null);
   // Redirect if user is logged in
   const router = useRouter();
-  const isSession = async () =>{
-    const { data:{session}} = await supabase.auth.getSession();
-    if(session){
-    setUser(session.user);}
-
-    if(!session){
-      router.push("auth");
-  }
-  };
-    
-    const supaBaseCabinets = async () => {
-        const { data:medicinecabinets, error } = await supabase
-        .from('medicinecabinets')
-        .select("*");
-        if (medicinecabinets) {
-            setCabinets(medicinecabinets);
-        };
-        if (error) console.log('error cabinets', error);  
-    };
-    
-    const supaBaseMedicines = async () => {
-        const { data:medicines, error } = await supabase
-        .from('medicines')
-        .select("*");
-        if (medicines) {
-            setMedicines(medicines);
-        };
-        if (error) console.log('error mediciens', error);  
-    };
-
+  
     useEffect(() => {
-      supaBaseCabinets();
-      supaBaseMedicines();
-      isSession();
+      const checkSession = async () =>{
+        const { data:{session}} = await supabase.auth.getSession();
+        if(session){
+        setUser(session.user);
+        if(session.user.id){
+          fetchCabinet(session.user.id);
+        }
+      }
+    
+        if(!session){
+          router.push("/auth");
+      }
+      };
+      fetchMedicines();
+      checkSession();
     }, []);
     
+    const fetchCabinet = async (userId) => {
+      const { data:medicinecabinets, error } = await supabase
+      .from('medicinecabinets')
+      .select("*")
+      .eq('user_id', userId);
+      if (medicinecabinets) {
+          setCabinets(medicinecabinets);
+      };
+      if (error) console.log('error cabinets', error);  
+  };
+
+  const fetchMedicines = async () => {
+    const { data:medicines, error } = await supabase
+    .from('medicines')
+    .select("*");
+    if (medicines) {
+        setMedicines(medicines);
+    };
+    if (error) console.log('error mediciens', error);  
+};
+
+
     const getCabinetNameById = (cabinetId) => {
       const cabinet = cabinets.find((cabinet) => cabinet.cabinet_id === cabinetId);
       return cabinet ? cabinet.name : "";
