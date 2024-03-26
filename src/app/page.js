@@ -1,10 +1,15 @@
 "use client";
 import Link from "next/link";
 import {supabase} from "@/lib/supabase"
-import { useEffect, useState } from "react";
+import { useEffect, useState,useCallback } from "react";
 import { useRouter } from 'next/navigation';
+// Styles
+import {Button, Tab} from "@nextui-org/react";
+import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, User, Chip, Tooltip, getKeyValue} from "@nextui-org/react";
 
 export default function Home() {
+    
+
       // State
       const [cabinets, setCabinets] = useState([]);
       const [medicines, setMedicines] = useState([]);
@@ -57,7 +62,7 @@ export default function Home() {
       return cabinet ? cabinet.name : "";
     };
 
-    return (<>
+        return (<>
       {/* Main content */}
       <main className="flex-grow flex items-center justify-center px-1">
         <div className="max-w-lg w-full text-center">
@@ -73,14 +78,14 @@ export default function Home() {
                         <div className="text-left mb-8">
                             <h2 className="text-lg font-semibold mb-4">Your cabinets</h2>
                             <Link href="cabinet">
-                                <button className="ml-2 mb-3 bg-blue-500 text-white px-6 py-1 rounded">View Cabinet</button>
+                                <Button className="ml-2 mb-3" color="primary">View All Cabinet</Button>
                             </Link>
                             <ul className="space-y-2">
                                 {cabinets.map((cabinet) => (
                                     <li key={cabinet.cabinet_id}>
                                         <span className="font-semibold">{cabinet.name}</span>
                                         <Link href={`cabinet/${cabinet.cabinet_id}`}>
-                                            <button className="ml-2 bg-blue-500 text-white px-2 py-1 rounded">View Cabinet</button>
+                                            <Button className="ml-2 px-2 py-1" color="primary">View Cabinet</Button>
                                         </Link>
                                     </li>
                                 ))}
@@ -99,31 +104,35 @@ export default function Home() {
                       </div>
                       <div className="flex justify-end items-center mb-2">
                         <div className="text-right mb-2">
-                          <Link href="../medicine"><button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold mr-2 px-4 py-2 rounded-lg focus:outline-none">View All</button></Link>
+                          <Link href="../medicine">
+                            <Button className="mr-2 px-4 py-2" color="primary">View All</Button>
+                            </Link>
                         </div>
                         <div className="text-right mb-2">
-                          <Link href="../medicine/create"><button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg focus:outline-none">Add New Medicine</button></Link>
+                          <Link href="../medicine/create">
+                            <Button className="px-4 py-2" color="primary">Add Medicine</Button>
+                            </Link>
                         </div>
                       </div>
-                        <table className="w-full border-collapse border border-gray-300">
-                        <thead className="bg-gray-200">
+                      <table className="w-full border-collapse border border-gray-300">
+                          <thead className="bg-gray-200">
                           <tr>
                             <th className="border border-gray-300 px-4 py-2">Name</th>
-                            <th className="border border-gray-300 px-4 py-2">Expiration</th>
-                            <th className="border border-gray-300 px-4 py-2">Cabinet</th>
-                            <th className="border border-gray-300 px-4 py-2">Actions</th>
+                          <th className="border border-gray-300 px-4 py-2">Expiration</th>
+                          <th className="border border-gray-300 px-4 py-2">Cabinet</th>
+                          <th className="border border-gray-300 px-4 py-2">Actions</th>
               
                           </tr>
                         </thead>
                         <tbody>
                           {medicines.map((medicine) => (
-                              <tr key={medicine.medicine_id}>
+                            <tr key={medicine.medicine_id}>
                               <td className="border border-gray-300 px-4 py-2">{medicine.medicine_name}</td>
                               <td className="border border-gray-300 px-4 py-2">{medicine.expiration_date}</td>
                               <td className="border border-gray-300 px-4 py-2">{getCabinetNameById(medicine.cabinet_id)}</td>
               
                               <td className="border border-gray-300 px-4 py-2">
-                                <Link href={`medicine/edit/${medicine.medicine_id}`}><button className="bg-green-500 text-white px-2 py-1 rounded mr-2">Edit</button></Link>
+                              <Link href={`medicine/edit/${medicine.medicine_id}`}><button className="bg-green-500 text-white px-2 py-1 rounded mr-2">Edit</button></Link>
                                 <Link href={`medicine/delete/${medicine.medicine_id}`}><button className="bg-red-500 text-white px-2 py-1 rounded">Delete</button></Link>
                               </td>
                             </tr>
